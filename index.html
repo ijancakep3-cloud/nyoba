@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cita Rasa Kotabaru</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8ef;--card:#fff;--ink:#2b1d14;--muted:#7a6a5d;--accent:#e4572e;--accent2:#0a7e8c;--gold:#f4b942;--shadow:0 10px 30px rgba(80,40,10,.12)}
+body.dark{--bg:#17110d;--card:#241a14;--ink:#f6e9da;--muted:#b9a794;--shadow:0 10px 30px rgba(0,0,0,.5)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);transition:background .4s,color .4s}
+h1,h2,h3{font-family:'Playfair Display',serif}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;backdrop-filter:blur(12px);background:rgba(20,10,5,.35);color:#fff}
+nav b{font-family:'Playfair Display',serif;font-size:1.2rem}
+nav .r{display:flex;gap:18px;align-items:center}
+nav a{color:#fff;text-decoration:none;font-size:.9rem}
+nav button{background:rgba(255,255,255,.2);border:0;color:#fff;border-radius:20px;padding:6px 12px;cursor:pointer}
+.hero{min-height:100vh;display:grid;place-items:center;text-align:center;color:#fff;position:relative;overflow:hidden;
+background:linear-gradient(160deg,#0a7e8c 0%,#0b4f6c 45%,#e4572e 120%)}
+.hero .wave{position:absolute;bottom:-1px;left:0;width:100%}
+.hero .float{position:absolute;font-size:3rem;opacity:.85;animation:fl 6s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-22px) rotate(8deg)}}
+.hero h1{font-size:clamp(2.6rem,8vw,5.5rem);line-height:1.05;text-shadow:0 6px 24px rgba(0,0,0,.35)}
+.hero p{max-width:560px;margin:18px auto 28px;opacity:.95}
+.btn{display:inline-block;background:var(--gold);color:#3a2300;padding:14px 30px;border-radius:40px;font-weight:600;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.25);transition:.25s}
+.btn:hover{transform:translateY(-3px) scale(1.04)}
+.hero-in{position:relative;z-index:2;padding:0 6vw}
+.stats{display:flex;gap:28px;justify-content:center;margin-top:38px;flex-wrap:wrap}
+.stats div{background:rgba(255,255,255,.15);padding:12px 22px;border-radius:16px;backdrop-filter:blur(6px)}
+.stats b{display:block;font-size:1.6rem}
+section{padding:80px 5vw}
+.title{text-align:center;margin-bottom:34px}
+.title h2{font-size:clamp(1.9rem,5vw,3rem)}
+.title p{color:var(--muted);margin-top:8px}
+.tools{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:34px}
+.tools input{padding:12px 20px;border-radius:30px;border:2px solid transparent;background:var(--card);color:var(--ink);box-shadow:var(--shadow);width:min(360px,100%);font:inherit}
+.tools input:focus{outline:0;border-color:var(--accent)}
+.chip{padding:10px 18px;border-radius:30px;border:0;cursor:pointer;background:var(--card);color:var(--ink);box-shadow:var(--shadow);font:inherit;font-size:.88rem;transition:.2s}
+.chip.on,.chip:hover{background:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:28px;max-width:1200px;margin:auto}
+.card{background:var(--card);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:.35s;opacity:0;transform:translateY(30px)}
+.card.show{opacity:1;transform:none}
+.card:hover{transform:translateY(-8px) rotate(-.6deg)}
+.pic{height:190px;position:relative;display:grid;place-items:center;overflow:hidden}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.card:hover .pic img,.card:hover .emo{transform:scale(1.15) rotate(6deg)}
+.emo{font-size:5.5rem;transition:.5s;filter:drop-shadow(0 8px 10px rgba(0,0,0,.25))}
+.tag{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.45);color:#fff;padding:4px 12px;border-radius:20px;font-size:.75rem;backdrop-filter:blur(4px);z-index:2}
+.fav{position:absolute;top:8px;right:10px;font-size:1.5rem;background:none;border:0;cursor:pointer;z-index:2;transition:.2s}
+.fav:hover{transform:scale(1.3)}
+.body{padding:18px 20px 22px}
+.body h3{font-size:1.3rem;margin-bottom:6px}
+.body p{color:var(--muted);font-size:.88rem;line-height:1.55}
+.meta{display:flex;justify-content:space-between;margin-top:14px;font-size:.82rem;align-items:center}
+.pedas span{opacity:.25}.pedas span.on{opacity:1}
+.empty{text-align:center;color:var(--muted);grid-column:1/-1;padding:40px}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;place-items:center;z-index:100;padding:18px;backdrop-filter:blur(5px)}
+.modal.open{display:grid}
+.box{background:var(--card);border-radius:26px;max-width:640px;width:100%;max-height:92vh;overflow:auto;animation:pop .35s}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+.box .pic{height:240px}
+.box .in{padding:24px 28px 30px}
+.box h2{font-size:2rem}
+.box h4{margin:18px 0 8px;color:var(--accent)}
+.box ul{padding-left:20px;color:var(--muted);line-height:1.8}
+.x{position:absolute;right:16px;top:12px;background:#fff;border:0;border-radius:50%;width:36px;height:36px;font-size:1.1rem;cursor:pointer;z-index:5}
+.mbox{position:relative}
+/* spice game */
+.game{max-width:760px;margin:auto;background:var(--card);padding:34px;border-radius:26px;box-shadow:var(--shadow);text-align:center}
+.game input[type=range]{width:100%;margin:22px 0;accent-color:var(--accent)}
+.game .res{font-size:1.1rem;min-height:80px}
+.game .res b{font-size:1.7rem;display:block;font-family:'Playfair Display',serif;color:var(--accent)}
+.mini{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.mini span{background:rgba(228,87,46,.12);padding:6px 14px;border-radius:20px;font-size:.85rem}
+footer{text-align:center;padding:40px 5vw;color:var(--muted);font-size:.85rem}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,100px);background:#222;color:#fff;padding:12px 24px;border-radius:30px;transition:.4s;z-index:200}
+.toast.on{transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<nav>
+  <b>🌊 Cita Rasa Kotabaru</b>
+  <div class="r"><a href="#menu">Kuliner</a><a href="#rasa">Cari Rasa</a><button id="theme">🌙 Mode</button></div>
+</nav>
+
+<header class="hero">
+  <span class="float" style="left:8%;top:22%">🐟</span>
+  <span class="float" style="right:10%;top:28%;animation-delay:1s">🍚</span>
+  <span class="float" style="left:16%;bottom:24%;animation-delay:2s">🦐</span>
+  <span class="float" style="right:18%;bottom:26%;animation-delay:3s">🥥</span>
+  <div class="hero-in">
+    <p style="letter-spacing:4px;font-size:.8rem;margin:0">KABUPATEN KOTABARU · KALIMANTAN SELATAN</p>
+    <h1>Cita Rasa<br>Bumi Saijaan</h1>
+    <p>Dari hasil laut Pulau Laut yang segar sampai kue tradisional Banjar yang manis legit. Jelajahi kuliner khas Kotabaru!</p>
+    <a class="btn" href="#menu">Mulai Jelajah 🍽️</a>
+    <div class="stats">
+      <div><b id="cTotal">0</b>Hidangan</div>
+      <div><b id="cFav">0</b>Favoritmu</div>
+      <div><b>3</b>Kategori Rasa</div>
+    </div>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" height="90"><path fill="#fff8ef" d="M0,64L60,69C120,75,240,85,360,80C480,75,600,53,720,48C840,43,960,53,1080,64C1200,75,1320,85,1380,90L1440,96L1440,120L0,120Z"/></svg>
+</header>
+
+<section id="menu">
+  <div class="title"><h2>Jelajahi Menu Khas</h2><p>Klik kartu untuk melihat detail. Tap ❤️ untuk menyimpan favorit.</p></div>
+  <div class="tools">
+    <input id="q" placeholder="🔍 Cari hidangan...">
+  </div>
+  <div class="tools" id="chips"></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="rasa">
+  <div class="title"><h2>Seberapa Kuat Seleramu?</h2><p>Geser slider tingkat pedas, kami carikan hidangan yang cocok.</p></div>
+  <div class="game">
+    <div style="font-size:3rem" id="face">😋</div>
+    <input type="range" id="sl" min="0" max="3" value="1">
+    <div class="res" id="res"></div>
+  </div>
+</section>
+
+<footer>Dibuat dengan ❤️ untuk Kotabaru, Kalimantan Selatan.<br>Info hidangan bersifat umum; ketersediaan bisa berbeda di tiap warung.</footer>
+
+<div class="modal" id="modal"><div class="box mbox" id="box"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/*
+ CARA MENAMBAH FOTO ASLI:
+ isi properti "img" dengan URL foto atau path file lokal, misal img:"foto/soto.jpg".
+ Jika kosong / gagal dimuat, otomatis tampil ilustrasi emoji.
+*/
+const FOODS = [
+ {id:1,name:"Soto Banjar",cat:"Berkuah",emo:"🍲",c:["#f9d56e","#f08a24"],pedas:1,
+  desc:"Soto kuah bening kekuningan beraroma rempah, dengan suwiran ayam, bihun, telur, dan perkedel.",
+  bahan:["Ayam kampung","Bihun & soun","Telur rebus","Kayu manis, cengkeh, pala","Perkedel kentang"],
+  tips:"Sajikan hangat bersama ketupat dan jeruk limau.",img:""},
+ {id:2,name:"Nasi Kuning Banjar",cat:"Berkuah",emo:"🍛",c:["#ffe066","#ff9f1c"],pedas:1,
+  desc:"Nasi gurih pulen berwarna kuning dengan lauk ayam atau ikan haruan masak habang.",
+  bahan:["Beras","Kunyit","Santan","Ayam/ikan masak habang","Telur"],
+  tips:"Sarapan favorit warga, biasanya sudah habis sebelum siang.",img:""},
+ {id:3,name:"Ikan Bakar Pulau Laut",cat:"Hasil Laut",emo:"🐟",c:["#48cae4","#0077b6"],pedas:2,
+  desc:"Ikan laut segar tangkapan nelayan dibakar dengan bumbu kecap manis, disantap dengan sambal terasi.",
+  bahan:["Ikan laut segar","Kecap manis","Bawang putih","Jeruk nipis","Sambal terasi"],
+  tips:"Cocok dinikmati dengan nasi hangat dan lalapan.",img:""},
+ {id:4,name:"Udang & Kepiting Saus",cat:"Hasil Laut",emo:"🦐",c:["#ff8fa3","#e4572e"],pedas:3,
+  desc:"Hasil laut segar dimasak dengan saus pedas manis atau lada hitam, favorit saat berkumpul bersama keluarga.",
+  bahan:["Udang/kepiting","Cabai","Bawang bombay","Saus tiram","Lada hitam"],
+  tips:"Siapkan banyak tisu!",img:""},
+ {id:5,name:"Amplang",cat:"Camilan",emo:"🥨",c:["#ffd6a5","#e09f3e"],pedas:0,
+  desc:"Kerupuk renyah dari ikan tenggiri atau ikan laut lain, camilan khas pesisir Kalimantan yang cocok untuk oleh-oleh.",
+  bahan:["Ikan tenggiri","Tepung tapioka","Bawang putih","Garam"],
+  tips:"Simpan dalam wadah kedap udara agar tetap renyah.",img:""},
+ {id:6,name:"Kue Bingka",cat:"Kue & Manis",emo:"🥮",c:["#ffe5ec","#f4a261"],pedas:0,
+  desc:"Kue tradisional Banjar yang lembut dan manis dari telur, santan, dan tepung, dengan varian bingka kentang atau ketan.",
+  bahan:["Telur","Santan","Kentang/tepung","Gula","Mentega"],
+  tips:"Wajib ada di meja saat hari raya.",img:""},
+ {id:7,name:"Wadai Cincin",cat:"Kue & Manis",emo:"🍩",c:["#fcd5ce","#d4a373"],pedas:0,
+  desc:"Kue goreng bertekstur kenyal dan renyah dengan siraman gula merah yang manis legit.",
+  bahan:["Tepung beras","Tepung ketan","Gula merah","Minyak goreng"],
+  tips:"Paling nikmat disantap selagi hangat bersama teh.",img:""},
+ {id:8,name:"Es Kelapa Muda",cat:"Kue & Manis",emo:"🥥",c:["#b7e4c7","#40916c"],pedas:0,
+  desc:"Minuman penghilang dahaga di cuaca pesisir yang terik: air dan daging kelapa muda, sirup, dan es batu.",
+  bahan:["Kelapa muda","Sirup","Es batu","Susu kental manis"],
+  tips:"Sempurna sesudah makan seafood pedas.",img:""}
+];
+const CATS=["Semua","Berkuah","Hasil Laut","Camilan","Kue & Manis","❤️ Favorit"];
+let cat="Semua", term="";
+let favs=[]; try{favs=JSON.parse(localStorage.getItem("favKtb")||"[]")}catch(e){}
+const $=s=>document.querySelector(s);
+const save=()=>{try{localStorage.setItem("favKtb",JSON.stringify(favs))}catch(e){}$("#cFav").textContent=favs.length};
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800)};
+const chilis=n=>`<span class="pedas">${[0,1,2].map(i=>`<span class="${i<n?'on':''}">🌶️</span>`).join("")}</span>`;
+const pic=f=>`<div class="pic" style="background:linear-gradient(135deg,${f.c[0]},${f.c[1]})">
+  <span class="emo">${f.emo}</span>
+  ${f.img?`<img src="${f.img}" alt="${f.name}" onerror="this.remove()">`:""}
+  <span class="tag">${f.cat}</span></div>`;
+
+function render(){
+  const g=$("#grid");
+  const list=FOODS.filter(f=>(cat==="Semua"||(cat==="❤️ Favorit"?favs.includes(f.id):f.cat===cat))&&f.name.toLowerCase().includes(term));
+  g.innerHTML=list.length?list.map(f=>`
+   <article class="card" data-id="${f.id}">
+     ${pic(f)}
+     <button class="fav" data-f="${f.id}">${favs.includes(f.id)?"❤️":"🤍"}</button>
+     <div class="body"><h3>${f.name}</h3><p>${f.desc}</p>
+       <div class="meta">${chilis(f.pedas)}<span style="color:var(--accent);font-weight:600">Lihat detail →</span></div></div>
+   </article>`).join(""):`<div class="empty">Belum ada hidangan di sini 😢</div>`;
+  requestAnimationFrame(()=>document.querySelectorAll(".card").forEach((c,i)=>setTimeout(()=>c.classList.add("show"),i*70)));
+}
+function chips(){
+  $("#chips").innerHTML=CATS.map(c=>`<button class="chip ${c===cat?'on':''}">${c}</button>`).join("");
+}
+$("#chips").onclick=e=>{if(e.target.classList.contains("chip")){cat=e.target.textContent;chips();render()}};
+$("#q").oninput=e=>{term=e.target.value.toLowerCase();render()};
+$("#grid").onclick=e=>{
+  const fb=e.target.closest(".fav");
+  if(fb){e.stopPropagation();const id=+fb.dataset.f;
+    favs=favs.includes(id)?favs.filter(x=>x!==id):[...favs,id];save();
+    toast(favs.includes(id)?"Ditambahkan ke favorit ❤️":"Dihapus dari favorit");render();return}
+  const c=e.target.closest(".card"); if(c)openModal(+c.dataset.id);
+};
+function openModal(id){
+  const f=FOODS.find(x=>x.id===id);
+  $("#box").innerHTML=`<button class="x" onclick="closeModal()">✕</button>${pic(f)}
+   <div class="in"><h2>${f.name}</h2><p style="color:var(--muted);margin-top:8px;line-height:1.6">${f.desc}</p>
+   <h4>Bahan Utama</h4><ul>${f.bahan.map(b=>`<li>${b}</li>`).join("")}</ul>
+   <h4>Tingkat Pedas</h4>${chilis(f.pedas)}
+   <h4>Tips Menikmati</h4><p style="color:var(--muted)">${f.tips}</p></div>`;
+  $("#modal").classList.add("open");
+}
+function closeModal(){$("#modal").classList.remove("open")}
+$("#modal").onclick=e=>{if(e.target.id==="modal")closeModal()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+
+/* slider rasa */
+const lv=[
+ {face:"😌",t:"Anti Pedas",s:"Manis & gurih saja, ya!"},
+ {face:"🙂",t:"Pedas Ringan",s:"Rempah hangat tanpa membakar lidah."},
+ {face:"🥵",t:"Pedas Sedang",s:"Mulai berkeringat tapi nagih."},
+ {face:"🔥",t:"Pedas Level Dewa",s:"Siap bertarung dengan sambal!"}];
+function rasa(){
+  const v=+$("#sl").value,L=lv[v];
+  const m=FOODS.filter(f=>v===0?f.pedas===0:v===3?f.pedas>=2:f.pedas===v||f.pedas===v-1&&f.pedas>0);
+  $("#face").textContent=L.face;
+  $("#res").innerHTML=`<b>${L.t}</b>${L.s}<div class="mini">${m.map(f=>`<span>${f.emo} ${f.name}</span>`).join("")||"<span>Belum ada rekomendasi</span>"}</div>`;
+}
+$("#sl").oninput=rasa;
+
+$("#theme").onclick=()=>{document.body.classList.toggle("dark");$("#theme").textContent=document.body.classList.contains("dark")?"☀️ Mode":"🌙 Mode"};
+
+$("#cTotal").textContent=FOODS.length;
+chips();render();save();rasa();
+</script>
+</body>
+</html>
